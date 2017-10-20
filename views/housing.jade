@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    h1= title
+    p= message
+    form(action="", method="post")
+        input(type="text", name="adresse", placeholder="Adresse")
+        input(type="text", name="codePostal", placeholder="Code Postal")
+        input(type="text", name="ville", placeholder="Ville")
+        input(type="text", name="pays", placeholder="Pays")
+        input(type="number", name="nbrChambre", placeholder="Nombre de chambres")
+        input(type="number", name="nbrSalleDeBain", placeholder="Nombre de salle de bain")
+        input(type="number", name="prix", placeholder="prix/nuit")
+        input(type="date", name="dateDebut", placeholder="date de début de séjour")
+        input(type="date", name="dateFin", placeholder="date de fin de séjour")
+        input(type="number", name="nbrVoyageur", placeholder="Nombre de voyageurs max")
+        input(type="text", name="username", placeholder="Nom d'utilisateur")
+
+        input(type="text", name="titreAnnonce" , placeholder="Titre de l'annonce")
+        textarea(rows='5', cols='100', name="description", placeholder="description de l'annonce")
+
+
+
+
+        input(type="submit", value="submit")

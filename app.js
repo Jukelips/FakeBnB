@@ -9,6 +9,9 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var login = require('./routes/login');
 var routes = require('./routes/router');
+
+var housing = require('./routes/housing');
+
 var app = express();
 // Connection URL
 var url = 'mongodb://localhost:27017/fakebnb';
@@ -28,6 +31,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', routes);
 app.use('/login', login);
+
+app.use('/users', users);
+app.use('/login', login);
+app.use('/housing',housing);
 
 
 app.use(session({
@@ -70,7 +77,6 @@ app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
