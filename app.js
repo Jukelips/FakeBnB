@@ -4,26 +4,44 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-
-
-var index = require('./routes/index');
-var users = require('./routes/users');
+var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var login = require('./routes/login');
-
+var routes = require('./routes/router');
 var app = express();
-
-
 // Connection URL
-var url = 'mongodb://localhost:27017/myproject';
+var url = 'mongodb://localhost:27017/fakebnb';
+var db = mongoose.connection;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Use connect method to connect to the server
-MongoClient.connect(url, function(err, db) {
+/*MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     console.log("Connected successfully to server");
     //insertDocuments(db, function() {
         db.close();
     //});
+});*/
+
+app.use('/', routes);
+app.use('/login', login);
+
+
+app.use(session({
+    secret: 'yolo',
+    resave: true,
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongooseConnection: db
+    })
+}));
+
+
+mongoose.connect(url, function(err) {
+    if (err) { throw err; }
 });
 
 /*var insertDocuments = function(db, callback) {
@@ -49,14 +67,10 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
-app.use('/login', login);
+//app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
